@@ -12,7 +12,7 @@ body,html{
 }
 
 #rcmd{
-	width : 30%;
+	width : 60%;
 }
 
 li{
@@ -29,7 +29,11 @@ li{
 }
 
 #search{
-	width : 30%;
+	width : 60%;
+}
+
+.display_similar_songs{
+	text-align : right;
 }
 #song_name{
 	border:none;
@@ -43,18 +47,45 @@ li{
 }
 
 #similar_songs{
-	margin-top : 8%;
+	margin-top : 5%;
 	display : flex;
 	flex-direction : column;
 	align-items : center;
 }
 
-.display_similar_songs{
+.display_details{
+	margin-top : 2%;
+	display : flex;
+    justify-content: space-between;
 	width : 50%;
 	padding : 1%;
 }
 
-.display_similar_songs:hover{
-    
+
+.display_artist_name{
+	margin-top : 20px;
+	align-items :end;
+	text-align : right
+}
+
+.display_details:hover{
+    cursor : pointer;
+    box-shadow: 2px 3px #888888;
     background-color : rgb(0,0,0,0.1);
+}
+
+#home{
+	text-decoration:none;
+	color:black;
+	font-size : 200%;
+	letter-spacing : 0.4em; 
+	margin-left : 4%;
+}
+
+#appbar{
+
+    
+	padding : 1.3%;
+/*    height : 7%; */
+	background-color : rgb(0,96,87);
 }

@@ -1,16 +1,39 @@
 const express = require('express')
 const router = express.Router()
 const fetch = require('node-fetch')
-
+const youtube_fetch = require('./fetching.js')
 
 const dotenv = require('dotenv')
 dotenv.config()
 
+//credentials for verification
 const details = {
 	grant_type: 'client_credentials',
 	client_id : process.env.CLIENT_IDE,
 	client_secret : process.env.CLIENT_SECT
 }
+
+
+//home
+router.get('/',(req,res) => {
+	res.render('home')
+})
+
+
+
+//page to display similar songs
+var song
+var artist_name
+router.get("/songs/:info", (req,res) => {
+
+	const testing = req.params.info.split('&')
+	song = testing[1]
+	artist_name = testing[0]
+
+	console.log(testing)
+	res.render("similar_songs")
+})
+
 
 // console.log(details)
 
@@ -41,7 +64,7 @@ const result = await fetch('https://accounts.spotify.com/api/token',{method : "P
 	)
 
 	const info = await result.json()
-
+	console.log(info.access_token)
 	return info.access_token
 
 }
@@ -63,7 +86,7 @@ async function fetching_details(temp,link ){
 }
 
 //temp to store the auth code
-var temp = "BQC55VvMp7P6Rl108Zz8UG1mc_ufdP-9KO_yUdAW131N_2kFfdEuREr464Da5a45tugXrpbFmgHHC_zaSj8"
+var temp = "BQCa-xdpxYZHMyrP5vJPtNDSg5VJBhu30gwugkHQuBlanKJjgqbtOQ6GwHidGu_aiolZ3ve6VeCdQqmEU6M"
 //fetch the song of an artist 
 
 router.get('/artist/:name',async(req,res) => {
@@ -112,34 +135,31 @@ catch(e) {
 //function to make sure the list size of the genre is less than 5
 function checking_size_of_array(artist_genre){
 
-	if(artist_genre.length <= 3 )
+	if(artist_genre.length <= 3 ){
+		console.log(artist_genre)
 		return artist_genre
+	}	
 	else{
-		for(var i = 0; i <= artist_genre.length; i++){
 
-			if(artist_genre.length <= 3){
-				return artist_genre
-			}
+		//number of element that needs to be popped out
+		let number_of_element = artist_genre.length - 3
+		artist_genre.splice(3,number_of_element)
+		return artist_genre
 
-			artist_genre.pop()
-
-		}
 	}
 
 }
 
 //fetching the genre of a particular artist
-router.get('/artist_genre/:info',async function(req,res,next){
+router.get('/artist_genre',async function(req,res,next){
 
 	//middleware to do the fetching process and everything so as to fast it all up as js in non blocking
 
-	var info = req.params.info.split(',')
-	res.locals.info = info
-	var result = await fetching_details(temp,`https://api.spotify.com/v1/artists/${info[0]}`).catch(err => console.log("error : ",err))
+	var result = await fetching_details(temp,`https://api.spotify.com/v1/artists/${artist_name}`).catch(err => console.log("error : ",err))
 	
 	var genre = await result.json()
 	
-
+	// console.log("inside get : ",genre,"artist name : ", artist_name)
 	// making sure the number of genre is less than or equal to 5
 	var precise_genre = checking_size_of_array(genre['genres'])
 	
@@ -153,7 +173,7 @@ router.get('/artist_genre/:info',async function(req,res,next){
 	var genres_of_artist = res.locals.precise_genre	
 	
 	//url to find the similar songs
-	let url = `https://api.spotify.com/v1/recommendations?seed_artists=${res.locals.info[0]}&seed_genres=${res.locals.precise_genre.join(',')}&seed_tracks=${res.locals.info[1]}&limit=6`
+	let url = `https://api.spotify.com/v1/recommendations?seed_artists=${artist_name}&seed_genres=${res.locals.precise_genre.join(',')}&seed_tracks=${song}&limit=9`
 
 	var familiar_songs = await fetching_details(temp,url).catch(err => console.log(err))
 
@@ -165,9 +185,8 @@ router.get('/artist_genre/:info',async function(req,res,next){
 
 })
 
-//home
-router.get('/',(req,res) => {
-	res.render('home')
-})
+
+router.get('/test/:name',youtube_fetch.sample)
+
 
 module.exports = router 
