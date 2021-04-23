@@ -16,7 +16,7 @@ text_field.addEventListener('input',async() => {
 	if(text_field.value !==''){
 
 		similar_songs_section.innerHTML = " "
-		rcmd_section.innerHTML = "weiting...."
+		rcmd_section.innerHTML = "waiting...."
 		song_name.style.border = 'none'
 		const sam = await fetch(`/artist/${text_field.value}`,{method : 'GET'})
 		details = await sam.json()
