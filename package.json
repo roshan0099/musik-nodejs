@@ -4,6 +4,7 @@
   "description": "An app where you can search for similar songs and what not",
   "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Roshan",
