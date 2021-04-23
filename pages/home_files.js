@@ -86,7 +86,7 @@ async function fetching_details(temp,link ){
 }
 
 //temp to store the auth code
-var temp = "BQCa-xdpxYZHMyrP5vJPtNDSg5VJBhu30gwugkHQuBlanKJjgqbtOQ6GwHidGu_aiolZ3ve6VeCdQqmEU6M"
+var temp
 //fetch the song of an artist 
 
 router.get('/artist/:name',async(req,res) => {
