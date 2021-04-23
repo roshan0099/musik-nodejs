@@ -75,7 +75,7 @@ async function fetching_info(){
 
 }
 
-similar_songs_section.innerHTML = "weitingggg"
+similar_songs_section.innerHTML = "waiting.."
 fetching_info()
 
 
